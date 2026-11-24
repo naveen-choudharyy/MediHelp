@@ -134,12 +134,16 @@ const runTests = async () => {
     // Fetch patient
     const patientUser = await User.findOne({ email: 'john@example.com' });
     
-    // Choose a Monday: August 17th, 2026 is a Monday (our local time says August 17th, 2026 is current time)
+    // Calculate the next upcoming Monday
+    const nextMonday = new Date();
+    nextMonday.setUTCDate(nextMonday.getUTCDate() + ((1 + 7 - nextMonday.getUTCDay()) % 7 || 7));
+    const nextMondayStr = nextMonday.toISOString().split('T')[0];
+    
     const bookingReq = {
       user: patientUser,
       body: {
         doctor: doctorUser._id.toString(),
-        appointmentDate: '2026-08-17',
+        appointmentDate: nextMondayStr,
         startTime: '09:00',
         endTime: '09:30'
       }
@@ -148,7 +152,7 @@ const runTests = async () => {
     await bookAppointment(bookingReq, bookingRes);
 
     if (bookingRes.statusCode === 201 && bookingRes.body.success) {
-      console.log('✅ Appointment booked successfully on August 17th (Monday).');
+      console.log(`✅ Appointment booked successfully on ${nextMondayStr} (Monday).`);
     } else {
       throw new Error(`Failed to book appointment: ${JSON.stringify(bookingRes.body)}`);
     }
@@ -171,7 +175,7 @@ const runTests = async () => {
       user: patientUser,
       body: {
         doctor: doctorUser._id.toString(),
-        appointmentDate: '2026-08-17',
+        appointmentDate: nextMondayStr,
         startTime: '11:00', // Doctor doesn't have 11:00 slot
         endTime: '11:30'
       }

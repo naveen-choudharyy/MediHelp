@@ -171,7 +171,7 @@ const PatientAppointments = () => {
                   )}
                   {isJoinable && (
                     <Link to={`/appointments/${app._id}/consultation`} className="btn btn-primary">
-                      Join Video Consultation
+                      {app.callStatus === 'in-progress' ? '🔴 Join Active Consultation' : '📹 Join Video Consultation'}
                     </Link>
                   )}
                   {isCancelable && (

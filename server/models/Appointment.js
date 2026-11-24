@@ -33,6 +33,21 @@ const appointmentSchema = new mongoose.Schema({
     enum: ['video'],
     default: 'video'
   },
+  consultationRoomId: {
+    type: String,
+    trim: true
+  },
+  callStatus: {
+    type: String,
+    enum: ['idle', 'in-progress', 'completed', 'cancelled'],
+    default: 'idle'
+  },
+  callStartTime: {
+    type: Date
+  },
+  callEndTime: {
+    type: Date
+  },
   paymentStatus: {
     type: String,
     enum: ['pending', 'paid', 'failed'],
@@ -49,6 +64,14 @@ const appointmentSchema = new mongoose.Schema({
   }
 }, {
   timestamps: true
+});
+
+// Pre-save hook to ensure consultationRoomId is assigned
+appointmentSchema.pre('save', function (next) {
+  if (!this.consultationRoomId) {
+    this.consultationRoomId = `room_${this._id}`;
+  }
+  next();
 });
 
 // Indexes for query performance and preventing double bookings

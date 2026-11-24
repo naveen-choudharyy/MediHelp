@@ -17,6 +17,41 @@ const consultationSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  roomId: {
+    type: String,
+    trim: true
+  },
+  callStatus: {
+    type: String,
+    enum: ['idle', 'in-progress', 'completed', 'cancelled'],
+    default: 'idle'
+  },
+  participants: [
+    {
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      },
+      role: {
+        type: String,
+        enum: ['doctor', 'patient']
+      },
+      socketId: {
+        type: String
+      },
+      joinedAt: {
+        type: Date,
+        default: Date.now
+      },
+      leftAt: {
+        type: Date
+      }
+    }
+  ],
+  duration: {
+    type: Number, // duration in seconds
+    default: 0
+  },
   notes: {
     type: String,
     default: ''

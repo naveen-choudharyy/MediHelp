@@ -127,9 +127,9 @@ const DoctorDashboard = () => {
                   <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
                     Date: {new Date(app.appointmentDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', timeZone: 'UTC' })} | Time: {app.startTime} - {app.endTime}
                   </p>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                     <Link to={`/appointments/${app._id}/consultation`} className="btn btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}>
-                      Join Room & Start Call
+                      {app.callStatus === 'in-progress' ? '🔴 Resume Consultation' : '📹 Start Consultation'}
                     </Link>
                     <button
                       onClick={() => handleUpdateStatus(app._id, 'cancelled')}
